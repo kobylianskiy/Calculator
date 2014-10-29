@@ -17,7 +17,7 @@ public class RightParenthesisParser implements MathExpressionParser {
         if (mathExpression.charAt(index) != ')') {
             return null;
         }
-        context.setExpressionParsingIndex(index+1);
+        context.setExpressionParsingIndex(index + 1);
         return new RightParenthesisCommand(index);
     }
 }

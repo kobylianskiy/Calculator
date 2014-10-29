@@ -26,7 +26,7 @@ public class StateMachineCalculator extends FiniteStateMachine<State, Evaluation
 
     public static void main(String[] args) throws Exception {
         final StateMachineCalculator calculator = new StateMachineCalculator();
-        final BigDecimal result = calculator.evaluate("(2^2^3+4*2/(10-2))/257+2");
+        final BigDecimal result = calculator.evaluate("2^2^3^1");
         System.out.println("result = " + result);
     }
 }

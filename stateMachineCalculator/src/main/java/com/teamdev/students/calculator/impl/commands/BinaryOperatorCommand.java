@@ -5,7 +5,6 @@ import com.teamdev.students.calculator.impl.EvaluationStack;
 import com.teamdev.students.calculator.impl.operations.AbstractBinaryOperator;
 import com.teamdev.students.calculator.impl.operations.BinaryOperator;
 
-import java.math.BigDecimal;
 import java.util.Deque;
 
 public class BinaryOperatorCommand implements EvaluationCommand {
@@ -18,8 +17,6 @@ public class BinaryOperatorCommand implements EvaluationCommand {
     @Override
     public void evaluate(EvaluationStack stack) {
         final Deque<BinaryOperator> operatorStack = stack.getOperatorStack();
-        final Deque<BigDecimal> operandStack = stack.getOperandStack();
-
 
         if (operatorStack.isEmpty()) {
             operatorStack.push(binaryOperator);

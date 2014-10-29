@@ -14,7 +14,6 @@ public class RightParenthesisCommand implements EvaluationCommand {
     @Override
     public void evaluate(EvaluationStack stack) throws EvaluationException {
         while (!stack.isLeftParenthesisOnTheTop()) {
-            //todo
             if (stack.getOperatorStack().size() == 0) {
                 throw new EvaluationException("mismatched parenthesis", index);
             }

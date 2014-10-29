@@ -12,7 +12,7 @@ public class DivideBinaryOperator extends AbstractBinaryOperator {
     @Override
     public BigDecimal calculate(BigDecimal leftOperand, BigDecimal rightOperand) {
         if (BigDecimal.ZERO.compareTo(rightOperand) == 0) {
-            throw new IllegalArgumentException("Division by zero.");
+            throw new IllegalStateException("Division by zero.");
         }
         return leftOperand.divide(rightOperand, MathContext.DECIMAL32);
     }

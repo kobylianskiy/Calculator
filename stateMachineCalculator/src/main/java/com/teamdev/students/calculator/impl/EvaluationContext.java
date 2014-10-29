@@ -15,7 +15,7 @@ public class EvaluationContext implements StateMachineContext<State, EvaluationC
     private int expressionParsingIndex = 0;
 
     public EvaluationContext(String mathExpression) {
-        this.mathExpression = mathExpression;
+        this.mathExpression = mathExpression.replaceAll("\\s", "");
     }
 
     public String getMathExpression() {

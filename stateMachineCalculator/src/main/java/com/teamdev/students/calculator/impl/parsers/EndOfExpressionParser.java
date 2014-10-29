@@ -16,7 +16,7 @@ public class EndOfExpressionParser implements MathExpressionParser {
             return null;
         }
 
-        context.setExpressionParsingIndex(index+1);
+        context.setExpressionParsingIndex(index + 1);
         return new EndOfExpressionCommand();
     }
 }
