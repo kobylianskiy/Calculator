@@ -26,7 +26,7 @@ public class BinaryOperatorParser implements MathExpressionParser {
             return null;
         }
 
-        context.setExpressionParsingIndex(index+1);
+        context.setExpressionParsingIndex(index + 1);
         return new BinaryOperatorCommand(binaryOperator);
     }
 }
