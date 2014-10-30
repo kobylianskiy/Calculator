@@ -3,13 +3,11 @@ package com.teamdev.students.view;
 import com.teamdev.students.calculator.MathExpressionCalculator;
 import com.teamdev.students.calculator.impl.StateMachineCalculator;
 
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class ConsoleApplication {
     public static void execute() throws Exception {
         Scanner scanner = new Scanner(System.in);
-        PrintWriter writer = new PrintWriter(System.out);
         MathExpressionCalculator calculator = new StateMachineCalculator();
 
         String expression = "";

@@ -1,22 +1,23 @@
 package com.teamdev.students.calculator.impl.parsers;
 
-import com.teamdev.students.calculator.impl.EvaluationCommand;
-import com.teamdev.students.calculator.impl.EvaluationContext;
-import com.teamdev.students.calculator.impl.MathExpressionParser;
-import com.teamdev.students.calculator.impl.commands.EndOfExpressionCommand;
+import com.teamdev.students.calculator.EvaluationException;
+import com.teamdev.students.calculator.impl.*;
 
 public class EndOfExpressionParser implements MathExpressionParser {
 
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
-        final String mathExpression = context.getMathExpression();
-        final int index = context.getExpressionParsingIndex();
+        final MathExpressionReader expressionReader = context.getExpressionReader();
 
-        if (index != mathExpression.length()) {
-            return null;
+        if (expressionReader.endOfExpression()) {
+            return new EvaluationCommand() {
+                @Override
+                public void evaluate(EvaluationStack stack) throws EvaluationException {
+                    stack.popAllOperators();
+                }
+            };
         }
 
-        context.setExpressionParsingIndex(index + 1);
-        return new EndOfExpressionCommand();
+        return null;
     }
 }

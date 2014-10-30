@@ -1,9 +1,7 @@
 package com.teamdev.students.calculator.impl.parsers;
 
-import com.teamdev.students.calculator.impl.EvaluationCommand;
-import com.teamdev.students.calculator.impl.EvaluationContext;
-import com.teamdev.students.calculator.impl.MathExpressionParser;
-import com.teamdev.students.calculator.impl.commands.NumberCommand;
+import com.teamdev.students.calculator.EvaluationException;
+import com.teamdev.students.calculator.impl.*;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -17,17 +15,24 @@ public class NumberParser implements MathExpressionParser {
 
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
-
-        final String mathExpression = context.getMathExpression();
-        final int index = context.getExpressionParsingIndex();
+        final MathExpressionReader expressionReader = context.getExpressionReader();
+        final String mathExpression = expressionReader.getMathExpression();
+        final int index = expressionReader.getIndex();
 
         final ParsePosition parsePosition = new ParsePosition(index);
         final Number number = numberFormat.parse(mathExpression, parsePosition);
-        if (parsePosition.getErrorIndex() != -1) {
-            return null;
+
+        if (parsePosition.getErrorIndex() == -1) {
+            expressionReader.setIndex(parsePosition.getIndex());
+
+            return new EvaluationCommand() {
+                @Override
+                public void evaluate(EvaluationStack stack) throws EvaluationException {
+                    stack.pushNumber(new BigDecimal(number.doubleValue()));
+                }
+            };
         }
 
-        context.setExpressionParsingIndex(parsePosition.getIndex());
-        return new NumberCommand(new BigDecimal(number.doubleValue()));
+        return null;
     }
 }

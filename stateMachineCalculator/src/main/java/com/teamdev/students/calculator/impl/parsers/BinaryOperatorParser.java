@@ -1,32 +1,32 @@
 package com.teamdev.students.calculator.impl.parsers;
 
-import com.teamdev.students.calculator.impl.EvaluationCommand;
-import com.teamdev.students.calculator.impl.EvaluationContext;
-import com.teamdev.students.calculator.impl.MathExpressionParser;
-import com.teamdev.students.calculator.impl.commands.BinaryOperatorCommand;
-import com.teamdev.students.calculator.impl.operations.BinaryOperator;
-import com.teamdev.students.calculator.impl.operations.BinaryOperatorFactory;
+import com.teamdev.students.calculator.EvaluationException;
+import com.teamdev.students.calculator.impl.*;
+import com.teamdev.students.calculator.impl.BinaryOperatorFactory;
 
 public class BinaryOperatorParser implements MathExpressionParser {
-    private BinaryOperatorFactory factory = new BinaryOperatorFactory();
-
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
-        final String mathExpression = context.getMathExpression();
-        final int index = context.getExpressionParsingIndex();
 
-        if (index == mathExpression.length()) {
-            return null;
+        final MathExpressionReader expressionReader = context.getExpressionReader();
+        final BinaryOperatorFactory factory = context.getBinaryOperatorFactory();
+
+        final String remainingExpression = expressionReader.getRemainingExpression();
+
+        for (String presentation : factory.getAllOperators()) {
+            if (remainingExpression.startsWith(presentation)) {
+                final BinaryOperator binaryOperator = factory.create(presentation);
+                expressionReader.incrementIndex(presentation.length());
+
+                return new EvaluationCommand() {
+                    @Override
+                    public void evaluate(EvaluationStack stack) throws EvaluationException {
+                        stack.pushOperator(binaryOperator);
+                    }
+                };
+            }
         }
 
-        BinaryOperator binaryOperator =
-                factory.createBinaryOperator(mathExpression.charAt(index));
-
-        if (binaryOperator == null) {
-            return null;
-        }
-
-        context.setExpressionParsingIndex(index + 1);
-        return new BinaryOperatorCommand(binaryOperator);
+        return null;
     }
 }

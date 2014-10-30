@@ -1,0 +1,4 @@
+com\teamdev\students\fsm\FiniteStateMachine.class
+com\teamdev\students\fsm\StateAcceptor.class
+com\teamdev\students\fsm\TransitionMatrix.class
+com\teamdev\students\fsm\StateMachineContext.class

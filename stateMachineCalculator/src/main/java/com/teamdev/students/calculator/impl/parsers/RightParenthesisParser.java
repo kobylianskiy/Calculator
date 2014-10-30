@@ -1,23 +1,33 @@
 package com.teamdev.students.calculator.impl.parsers;
 
-import com.teamdev.students.calculator.impl.EvaluationCommand;
-import com.teamdev.students.calculator.impl.EvaluationContext;
-import com.teamdev.students.calculator.impl.MathExpressionParser;
-import com.teamdev.students.calculator.impl.commands.RightParenthesisCommand;
+import com.teamdev.students.calculator.EvaluationException;
+import com.teamdev.students.calculator.impl.*;
+
+import static com.teamdev.students.calculator.impl.parsers.MathExpressionSymbols.RIGHT_PARENTHESIS;
 
 public class RightParenthesisParser implements MathExpressionParser {
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
-        final String mathExpression = context.getMathExpression();
-        final int index = context.getExpressionParsingIndex();
+        final MathExpressionReader expressionReader = context.getExpressionReader();
 
-        if (index == mathExpression.length()) {
-            return null;
+        if (!expressionReader.endOfExpression() &&
+                expressionReader.getCurrentChar() == RIGHT_PARENTHESIS.getSymbol()) {
+
+            expressionReader.incrementIndex(1);
+
+            return new EvaluationCommand() {
+                @Override
+                public void evaluate(EvaluationStack stack) throws EvaluationException {
+
+                    if (stack.getParenthesisStack().isEmpty()) {
+                        throw new EvaluationException("Opening bracket expected.",
+                                expressionReader.getIndex());
+                    }
+
+                    stack.pushRightParenthesis();
+                }
+            };
         }
-        if (mathExpression.charAt(index) != ')') {
-            return null;
-        }
-        context.setExpressionParsingIndex(index + 1);
-        return new RightParenthesisCommand(index);
+        return null;
     }
 }

@@ -1,33 +1,29 @@
 package com.teamdev.students.calculator.impl;
 
+import com.teamdev.students.calculator.EvaluationException;
 import com.teamdev.students.fsm.StateAcceptor;
 import com.teamdev.students.fsm.StateMachineContext;
 import com.teamdev.students.fsm.TransitionMatrix;
 
-public class EvaluationContext implements StateMachineContext<State, EvaluationContext> {
+public class EvaluationContext implements StateMachineContext<State, EvaluationContext, EvaluationException> {
 
     private final EvaluationMatrix matrix = new EvaluationMatrix();
     private final EvaluationService evaluationService = new EvaluationService();
+    private final BinaryOperatorFactory binaryOperatorFactory = new BinaryOperatorFactory();
 
+    private final MathExpressionReader expressionReader;
     private final EvaluationStack evaluationStack = new EvaluationStack();
 
-    private final String mathExpression;
-    private int expressionParsingIndex = 0;
-
     public EvaluationContext(String mathExpression) {
-        this.mathExpression = mathExpression.replaceAll("\\s", "");
+        expressionReader = new MathExpressionReader(mathExpression);
     }
 
-    public String getMathExpression() {
-        return mathExpression;
+    public BinaryOperatorFactory getBinaryOperatorFactory() {
+        return binaryOperatorFactory;
     }
 
-    public int getExpressionParsingIndex() {
-        return expressionParsingIndex;
-    }
-
-    public void setExpressionParsingIndex(int expressionParsingIndex) {
-        this.expressionParsingIndex = expressionParsingIndex;
+    public MathExpressionReader getExpressionReader() {
+        return expressionReader;
     }
 
     public EvaluationStack getEvaluationStack() {
@@ -40,7 +36,7 @@ public class EvaluationContext implements StateMachineContext<State, EvaluationC
     }
 
     @Override
-    public StateAcceptor<State, EvaluationContext> getStateAcceptor() {
+    public StateAcceptor<State, EvaluationContext, EvaluationException> getStateAcceptor() {
         return evaluationService;
     }
 }

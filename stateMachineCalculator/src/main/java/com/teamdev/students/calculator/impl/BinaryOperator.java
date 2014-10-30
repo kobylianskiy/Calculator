@@ -1,4 +1,4 @@
-package com.teamdev.students.calculator.impl.operations;
+package com.teamdev.students.calculator.impl;
 
 import java.math.BigDecimal;
 

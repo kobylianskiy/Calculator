@@ -1,6 +1,6 @@
 package com.teamdev.students.calculator.impl;
 
-import com.teamdev.students.calculator.impl.operations.BinaryOperator;
+import com.teamdev.students.calculator.impl.operations.AbstractBinaryOperator;
 
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
@@ -33,18 +33,48 @@ public class EvaluationStack {
         operandStack.push(result);
     }
 
-    public boolean isOperatorOnTheTop() {
-        if (isLeftParenthesisOnTheTop())
-            return false;
-        if (operatorStack.size() != 0)
-            return true;
-        return false;
+    public void pushOperator(BinaryOperator operator) {
+
+        while (isOperatorOnTheTop() && ( (operatorStack.peek().compareTo(operator) > 0) ||
+                (operatorStack.peek().compareTo(operator) > -1 && ((AbstractBinaryOperator) operator).isLeftAssociative()) )) {
+            executeBinaryOperator();
+        }
+
+        operatorStack.push(operator);
     }
 
-    public boolean isLeftParenthesisOnTheTop() {
-        if (parenthesisStack.size() != 0 &&
-                parenthesisStack.peek() == operatorStack.size())
+    public void popAllOperators() {
+        while (!operatorStack.isEmpty()) {
+            executeBinaryOperator();
+        }
+    }
+
+    public void pushLeftParenthesis() {
+        parenthesisStack.push(operatorStack.size());
+    }
+
+    public void pushRightParenthesis() {
+        final int previousOperatorStackSize = parenthesisStack.pop();
+        while (previousOperatorStackSize < operatorStack.size()) {
+            executeBinaryOperator();
+        }
+    }
+
+    public void pushNumber(BigDecimal number) {
+        operandStack.push(number);
+    }
+
+    public boolean isOperatorOnTheTop() {
+        if (operatorStack.isEmpty()) {
+            return false;
+        }
+        if (parenthesisStack.isEmpty()) {
             return true;
+        }
+        if (parenthesisStack.peek() < operatorStack.size()) {
+            return true;
+        }
+
         return false;
     }
 }
