@@ -74,4 +74,46 @@ public class TestCalculator {
     public void testDivisionByZero() throws Exception {
         calculator.evaluate("10/0");
     }
+
+    @Test
+    public void tesSimpleMin() throws Exception {
+        BigDecimal result = calculator.evaluate("min(5;4;2;7)");
+        BigDecimal expected = new BigDecimal(2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testSimpleMax() throws Exception {
+        BigDecimal result = calculator.evaluate("max(5;4;2;7)");
+        BigDecimal expected = new BigDecimal(7);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testSimpleSum() throws Exception {
+        BigDecimal result = calculator.evaluate("sum(5;4;2;7)");
+        BigDecimal expected = new BigDecimal(18);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testSimpleSqrt() throws Exception {
+        BigDecimal result = calculator.evaluate("sqrt(4)");
+        BigDecimal expected = new BigDecimal(2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMinWithInnerFunctions() throws Exception {
+        BigDecimal result = calculator.evaluate("min(max(2;0;1);-1;sum(-2;-8))");
+        BigDecimal expected = new BigDecimal(-10);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testMaxWithInnerParentheses() throws Exception {
+        BigDecimal result = calculator.evaluate("min((2/2);5)");
+        BigDecimal expected = new BigDecimal(2);
+        assertEquals(expected, result);
+    }
 }

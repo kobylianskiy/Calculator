@@ -16,6 +16,10 @@ public class EvaluationService implements StateAcceptor<State, EvaluationContext
         put(BINARY_OPERATOR, new BinaryOperatorParser());
         put(LEFT_PARENTHESIS, new LeftParenthesisParser());
         put(RIGHT_PARENTHESIS, new RightParenthesisParser());
+        put(FUNCTION, new FunctionParser());
+        put(FUNCTION_LEFT_PARENTHESIS, new FunctionLeftParenthesisParser());
+        put(FUNCTION_RIGHT_PARENTHESIS, new FunctionRightParenthesisParser());
+        put(ARGUMENT_SEPARATOR, new ArgumentSeparatorParser());
         put(FINISH, new EndOfExpressionParser());
     }};
 
@@ -26,8 +30,7 @@ public class EvaluationService implements StateAcceptor<State, EvaluationContext
         final MathExpressionParser parser = parsers.get(possibleState);
 
         if (parser == null) {
-            throw new EvaluationException("Parser not found for state: " + possibleState,
-                    context.getExpressionReader().getIndex());
+            throw new IllegalStateException("Parser not found for state: " + possibleState);
         }
 
         context.getExpressionReader().skipWhitespaces();
@@ -36,6 +39,8 @@ public class EvaluationService implements StateAcceptor<State, EvaluationContext
         if (evaluationCommand == null) {
             return false;
         }
+
+        context.setPreviousState(possibleState);
 
         evaluationCommand.evaluate(context.getEvaluationStack());
 

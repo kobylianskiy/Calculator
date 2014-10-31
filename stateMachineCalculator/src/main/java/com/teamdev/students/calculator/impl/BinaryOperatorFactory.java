@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class BinaryOperatorFactory {
-    private Map<String, BinaryOperator> operators = new HashMap<String, BinaryOperator>() {{
+    private final Map<String, BinaryOperator> operators = new HashMap<String, BinaryOperator>() {{
         put("+", new PlusBinaryOperator());
         put("/", new DivideBinaryOperator());
         put("-", new MinusBinaryOperator());

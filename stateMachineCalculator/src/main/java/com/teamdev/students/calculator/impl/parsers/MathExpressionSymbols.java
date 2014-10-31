@@ -2,7 +2,8 @@ package com.teamdev.students.calculator.impl.parsers;
 
 public enum MathExpressionSymbols {
     LEFT_PARENTHESIS('('),
-    RIGHT_PARENTHESIS(')');
+    RIGHT_PARENTHESIS(')'),
+    ARGUMENT_SEPARATOR(';');
 
     private final char symbol;
 

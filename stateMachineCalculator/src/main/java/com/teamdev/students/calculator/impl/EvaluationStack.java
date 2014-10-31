@@ -12,6 +12,10 @@ public class EvaluationStack {
     private final Deque<BinaryOperator> operatorStack = new ArrayDeque<>();
     private final Deque<Integer> parenthesisStack = new ArrayDeque<>();
 
+    private final Deque<Function> functionStack = new ArrayDeque<>();
+    private final Deque<Integer> functionArgumentCount = new ArrayDeque<>();
+    private final Deque<Integer> functionParenthesisStack = new ArrayDeque<>();
+
     public Deque<Integer> getParenthesisStack() {
         return parenthesisStack;
     }
@@ -24,6 +28,18 @@ public class EvaluationStack {
         return operatorStack;
     }
 
+    public Deque<Function> getFunctionStack() {
+        return functionStack;
+    }
+
+    public Deque<Integer> getFunctionArgumentCount() {
+        return functionArgumentCount;
+    }
+
+    public Deque<Integer> getFunctionParenthesisStack() {
+        return functionParenthesisStack;
+    }
+
     public void executeBinaryOperator() {
         BigDecimal secondOperand = operandStack.pop();
         BigDecimal firstOperand = operandStack.pop();
@@ -33,10 +49,23 @@ public class EvaluationStack {
         operandStack.push(result);
     }
 
+    public void executeFunction() {
+        Function function = functionStack.pop();
+        int numberOfArguments = functionArgumentCount.pop();
+        BigDecimal[] arguments = new BigDecimal[numberOfArguments];
+
+        for (int i = 0; i < arguments.length; i++) {
+            arguments[i] = operandStack.pop();
+        }
+
+        BigDecimal result = function.calculate(arguments);
+        operandStack.push(result);
+    }
+
     public void pushOperator(BinaryOperator operator) {
 
-        while (isOperatorOnTheTop() && ( (operatorStack.peek().compareTo(operator) > 0) ||
-                (operatorStack.peek().compareTo(operator) > -1 && ((AbstractBinaryOperator) operator).isLeftAssociative()) )) {
+        while (isOperatorOnTheTop() && ((operatorStack.peek().compareTo(operator) > 0) ||
+                (operatorStack.peek().compareTo(operator) > -1 && ((AbstractBinaryOperator) operator).isLeftAssociative()))) {
             executeBinaryOperator();
         }
 
@@ -60,8 +89,30 @@ public class EvaluationStack {
         }
     }
 
+    public void pushFunctionLeftParenthesis() {
+        functionArgumentCount.push(1);
+        functionParenthesisStack.push(parenthesisStack.size());
+    }
+
+    public void pushFunctionRightParenthesis() {
+        executeFunction();
+    }
+
     public void pushNumber(BigDecimal number) {
         operandStack.push(number);
+    }
+
+    public void pushFunction(Function function) {
+        functionStack.push(function);
+    }
+
+    public void pushArgumentSeparator() {
+        int argumentCount = functionArgumentCount.pop();
+        functionArgumentCount.push(argumentCount + 1);
+
+        while (!isFunctionLeftParenthesisOnTheTop()) {
+            executeBinaryOperator();
+        }
     }
 
     public boolean isOperatorOnTheTop() {
@@ -72,6 +123,16 @@ public class EvaluationStack {
             return true;
         }
         if (parenthesisStack.peek() < operatorStack.size()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isFunctionLeftParenthesisOnTheTop() {
+        if (!functionParenthesisStack.isEmpty() &&
+                functionParenthesisStack.peek() == parenthesisStack.size()) {
+
             return true;
         }
 

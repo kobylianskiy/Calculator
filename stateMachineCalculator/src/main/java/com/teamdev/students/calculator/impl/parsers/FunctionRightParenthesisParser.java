@@ -7,7 +7,7 @@ import java.util.Deque;
 
 import static com.teamdev.students.calculator.impl.parsers.MathExpressionSymbols.RIGHT_PARENTHESIS;
 
-public class RightParenthesisParser implements MathExpressionParser {
+public class FunctionRightParenthesisParser implements MathExpressionParser {
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
         final MathExpressionReader expressionReader = context.getExpressionReader();
@@ -19,24 +19,21 @@ public class RightParenthesisParser implements MathExpressionParser {
 
         if (!expressionReader.endOfExpression() &&
                 expressionReader.getCurrentChar() == RIGHT_PARENTHESIS.getSymbol() &&
-                (functionParenthesisStack.isEmpty() || functionParenthesisStack.peek() !=
-                        parenthesisStackSize)) {
+                !functionParenthesisStack.isEmpty() && functionParenthesisStack.peek() ==
+                parenthesisStackSize) {
+
+            functionParenthesisStack.pop();
 
             expressionReader.incrementIndex(1);
 
             return new EvaluationCommand() {
                 @Override
                 public void evaluate(EvaluationStack stack) throws EvaluationException {
-
-                    if (stack.getParenthesisStack().isEmpty()) {
-                        throw new EvaluationException("Opening bracket expected.",
-                                expressionReader.getIndex());
-                    }
-
-                    stack.pushRightParenthesis();
+                    stack.pushFunctionRightParenthesis();
                 }
             };
         }
+
         return null;
     }
 }
