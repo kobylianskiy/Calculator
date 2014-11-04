@@ -13,6 +13,14 @@ public class EndOfExpressionParser implements MathExpressionParser {
             return new EvaluationCommand() {
                 @Override
                 public void evaluate(EvaluationStack stack) throws EvaluationException {
+
+                    if (!stack.getParenthesisStack().isEmpty() ||
+                            !stack.getFunctionParenthesisStack().isEmpty()) {
+
+                        throw new EvaluationException("Closing bracket expected at index:",
+                                expressionReader.getIndex());
+                    }
+
                     stack.popAllOperators();
                 }
             };

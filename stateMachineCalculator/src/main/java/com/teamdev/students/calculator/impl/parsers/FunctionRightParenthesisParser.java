@@ -2,12 +2,14 @@ package com.teamdev.students.calculator.impl.parsers;
 
 import com.teamdev.students.calculator.EvaluationException;
 import com.teamdev.students.calculator.impl.*;
+import com.teamdev.students.calculator.impl.functions.AbstractFunction;
 
 import java.util.Deque;
 
 import static com.teamdev.students.calculator.impl.parsers.MathExpressionSymbols.RIGHT_PARENTHESIS;
 
 public class FunctionRightParenthesisParser implements MathExpressionParser {
+
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
         final MathExpressionReader expressionReader = context.getExpressionReader();
@@ -22,13 +24,28 @@ public class FunctionRightParenthesisParser implements MathExpressionParser {
                 !functionParenthesisStack.isEmpty() && functionParenthesisStack.peek() ==
                 parenthesisStackSize) {
 
-            functionParenthesisStack.pop();
-
             expressionReader.incrementIndex(1);
 
             return new EvaluationCommand() {
                 @Override
                 public void evaluate(EvaluationStack stack) throws EvaluationException {
+
+                    if (functionParenthesisStack.isEmpty()) {
+                        throw new EvaluationException("Function opening bracket expected",
+                                expressionReader.getIndex());
+                    }
+
+                    final AbstractFunction function =
+                            (AbstractFunction) stack.getFunctionStack().peek();
+                    final int argumentCount = stack.getFunctionArgumentCount().peek();
+
+                    if (argumentCount >  function.getMaxArgumentCount() ||
+                            argumentCount < function.getMinArgumentCount()) {
+
+                        throw new EvaluationException("Wrong function argument count at index:",
+                                expressionReader.getIndex());
+                    }
+
                     stack.pushFunctionRightParenthesis();
                 }
             };

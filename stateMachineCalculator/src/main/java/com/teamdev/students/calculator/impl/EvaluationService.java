@@ -3,6 +3,8 @@ package com.teamdev.students.calculator.impl;
 import com.teamdev.students.calculator.EvaluationException;
 import com.teamdev.students.calculator.impl.parsers.*;
 import com.teamdev.students.fsm.StateAcceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,8 @@ import java.util.Map;
 import static com.teamdev.students.calculator.impl.State.*;
 
 public class EvaluationService implements StateAcceptor<State, EvaluationContext, EvaluationException> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EvaluationService.class);
 
     private final Map<State, MathExpressionParser> parsers = new HashMap<State, MathExpressionParser>() {{
         put(NUMBER, new NumberParser());
@@ -43,7 +47,7 @@ public class EvaluationService implements StateAcceptor<State, EvaluationContext
         context.setPreviousState(possibleState);
 
         evaluationCommand.evaluate(context.getEvaluationStack());
-
+        LOGGER.info("Current state: " + context.getPreviousState());
         return true;
     }
 }

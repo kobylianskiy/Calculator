@@ -6,6 +6,7 @@ import com.teamdev.students.calculator.impl.*;
 import static com.teamdev.students.calculator.impl.parsers.MathExpressionSymbols.ARGUMENT_SEPARATOR;
 
 public class ArgumentSeparatorParser implements MathExpressionParser {
+
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
         final MathExpressionReader expressionReader = context.getExpressionReader();

@@ -5,7 +5,6 @@ public abstract class FiniteStateMachine<State extends Enum,
         Result, TransitionError extends Exception> {
 
     public Result run(Context context) throws TransitionError {
-
         final TransitionMatrix<State> matrix = context.getTransitionMatrix();
         State currentState = matrix.getStartState();
 

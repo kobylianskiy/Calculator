@@ -6,6 +6,7 @@ import com.teamdev.students.calculator.impl.*;
 import static com.teamdev.students.calculator.impl.parsers.MathExpressionSymbols.*;
 
 public class LeftParenthesisParser implements MathExpressionParser {
+
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
         final MathExpressionReader expressionReader = context.getExpressionReader();

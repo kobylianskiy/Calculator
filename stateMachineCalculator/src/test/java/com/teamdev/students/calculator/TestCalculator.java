@@ -45,8 +45,8 @@ public class TestCalculator {
     }
 
     @Test(expected = EvaluationException.class)
-    public void testMissedLeftParenthesis() throws Exception {
-        BigDecimal result = calculator.evaluate("(2+3/3-1))");
+    public void testMissedOpeningBracket() throws Exception {
+        calculator.evaluate("(2+3/3-1))");
     }
 
     @Test
@@ -112,8 +112,35 @@ public class TestCalculator {
 
     @Test
     public void testMaxWithInnerParentheses() throws Exception {
-        BigDecimal result = calculator.evaluate("min((2/2);5)");
-        BigDecimal expected = new BigDecimal(2);
+        BigDecimal result = calculator.evaluate("min((2/2);(5))");
+        BigDecimal expected = new BigDecimal(1);
+        assertEquals(expected, result);
+    }
+
+    @Test(expected = EvaluationException.class)
+    public void testMissedClosingBracket() throws Exception {
+        calculator.evaluate("((2+4/3^2)");
+    }
+
+    @Test(expected = EvaluationException.class)
+    public void testMissedFunctionOpeningBracket() throws Exception {
+        calculator.evaluate("min2;3;)+10/2^3");
+    }
+
+    @Test(expected = EvaluationException.class)
+    public void testMissedFunctionClosingBracket() throws Exception {
+        calculator.evaluate("max(2;3;4+3");
+    }
+
+    @Test(expected = EvaluationException.class)
+    public void testSqrtWithWrongArgumentCount() throws Exception {
+        calculator.evaluate("sqrt(2;3;4)");
+    }
+
+    @Test
+    public void testComplicatedExpressionWithFunctions() throws Exception {
+        BigDecimal result = calculator.evaluate("(sum(sqrt(16);(-4);max(-2;-1;min(0;3;5));2*(3+4))-12)^10");
+        BigDecimal expected = new BigDecimal(1024);
         assertEquals(expected, result);
     }
 }

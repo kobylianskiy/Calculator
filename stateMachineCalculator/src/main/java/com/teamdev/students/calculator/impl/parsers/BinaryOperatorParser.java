@@ -5,6 +5,7 @@ import com.teamdev.students.calculator.impl.*;
 import com.teamdev.students.calculator.impl.BinaryOperatorFactory;
 
 public class BinaryOperatorParser implements MathExpressionParser {
+
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
 

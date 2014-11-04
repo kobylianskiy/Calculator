@@ -4,6 +4,7 @@ import com.teamdev.students.calculator.EvaluationException;
 import com.teamdev.students.calculator.impl.*;
 
 public class FunctionParser implements MathExpressionParser {
+
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
         final MathExpressionReader expressionReader = context.getExpressionReader();

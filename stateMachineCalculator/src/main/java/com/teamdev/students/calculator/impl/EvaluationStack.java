@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-
 public class EvaluationStack {
     private final Deque<BigDecimal> operandStack = new ArrayDeque<>();
     private final Deque<BinaryOperator> operatorStack = new ArrayDeque<>();
@@ -15,6 +14,8 @@ public class EvaluationStack {
     private final Deque<Function> functionStack = new ArrayDeque<>();
     private final Deque<Integer> functionArgumentCount = new ArrayDeque<>();
     private final Deque<Integer> functionParenthesisStack = new ArrayDeque<>();
+
+    private final Deque<Integer> functionArgumentEvaluation = new ArrayDeque<>();
 
     public Deque<Integer> getParenthesisStack() {
         return parenthesisStack;
@@ -92,9 +93,15 @@ public class EvaluationStack {
     public void pushFunctionLeftParenthesis() {
         functionArgumentCount.push(1);
         functionParenthesisStack.push(parenthesisStack.size());
+        functionArgumentEvaluation.push(operatorStack.size());
     }
 
     public void pushFunctionRightParenthesis() {
+        functionParenthesisStack.pop();
+
+        evaluateFunctionArgument();
+        functionArgumentEvaluation.pop();
+
         executeFunction();
     }
 
@@ -107,10 +114,14 @@ public class EvaluationStack {
     }
 
     public void pushArgumentSeparator() {
-        int argumentCount = functionArgumentCount.pop();
+        final int argumentCount = functionArgumentCount.pop();
         functionArgumentCount.push(argumentCount + 1);
 
-        while (!isFunctionLeftParenthesisOnTheTop()) {
+        evaluateFunctionArgument();
+    }
+
+    public void evaluateFunctionArgument() {
+        while (functionArgumentEvaluation.peek() < operatorStack.size()) {
             executeBinaryOperator();
         }
     }
@@ -123,16 +134,6 @@ public class EvaluationStack {
             return true;
         }
         if (parenthesisStack.peek() < operatorStack.size()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isFunctionLeftParenthesisOnTheTop() {
-        if (!functionParenthesisStack.isEmpty() &&
-                functionParenthesisStack.peek() == parenthesisStack.size()) {
-
             return true;
         }
 

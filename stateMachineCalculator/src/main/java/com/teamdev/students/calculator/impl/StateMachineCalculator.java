@@ -10,7 +10,7 @@ public class StateMachineCalculator extends FiniteStateMachine<State, Evaluation
         implements MathExpressionCalculator {
 
     @Override
-    public BigDecimal evaluate(String mathExpression) throws Exception {
+    public BigDecimal evaluate(String mathExpression) throws EvaluationException{
         return run(new EvaluationContext(mathExpression));
     }
 
@@ -27,7 +27,7 @@ public class StateMachineCalculator extends FiniteStateMachine<State, Evaluation
 
     public static void main(String[] args) throws Exception {
         final StateMachineCalculator calculator = new StateMachineCalculator();
-        final BigDecimal result = calculator.evaluate("min((2/2);3)");
+        final BigDecimal result = calculator.evaluate("123");
         // 2+3*5/15-3
         System.out.println("result = " + result);
     }
