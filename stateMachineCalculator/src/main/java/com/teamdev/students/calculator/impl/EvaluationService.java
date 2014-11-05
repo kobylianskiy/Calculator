@@ -34,6 +34,7 @@ public class EvaluationService implements StateAcceptor<State, EvaluationContext
         final MathExpressionParser parser = parsers.get(possibleState);
 
         if (parser == null) {
+            LOGGER.error("Parser not found for state: " + possibleState);
             throw new IllegalStateException("Parser not found for state: " + possibleState);
         }
 

@@ -2,15 +2,20 @@ package com.teamdev.students.calculator.impl.parsers;
 
 import com.teamdev.students.calculator.EvaluationException;
 import com.teamdev.students.calculator.impl.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
 
 import static com.teamdev.students.calculator.impl.parsers.MathExpressionSymbols.RIGHT_PARENTHESIS;
 
 public class RightParenthesisParser implements MathExpressionParser {
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(RightParenthesisParser.class);
 
     @Override
     public EvaluationCommand parse(EvaluationContext context) {
+        LOGGER.info("Inside RightParenthesisParser.");
         final MathExpressionReader expressionReader = context.getExpressionReader();
         final Deque<Integer> functionParenthesisStack =
                 context.getEvaluationStack().getFunctionParenthesisStack();
@@ -22,7 +27,7 @@ public class RightParenthesisParser implements MathExpressionParser {
                 expressionReader.getCurrentChar() == RIGHT_PARENTHESIS.getSymbol() &&
                 (functionParenthesisStack.isEmpty() || functionParenthesisStack.peek() !=
                         parenthesisStackSize)) {
-
+            LOGGER.info("RightParenthesisParser is accepted.");
             expressionReader.incrementIndex(1);
 
             return new EvaluationCommand() {

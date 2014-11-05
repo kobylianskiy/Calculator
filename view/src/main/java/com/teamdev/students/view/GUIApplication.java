@@ -9,9 +9,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static javax.swing.SwingConstants.CENTER;
+
 public class GUIApplication {
-    private static final int WIDTH = 700;
-    private static final int HEIGHT = 150;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 100;
 
     private final JLabel expressionLabel;
     private final JLabel resultLabel;
@@ -29,11 +31,17 @@ public class GUIApplication {
 
     public GUIApplication() {
         calculator = new StateMachineCalculator();
+
         mathExpression = new JTextArea();
+
         result = new JTextArea("0");
         result.setEditable(false);
-        expressionLabel = new JLabel("Expression:");
-        resultLabel = new JLabel("Result:");
+
+        expressionLabel = new JLabel("Input mathematical expression:");
+        expressionLabel.setHorizontalAlignment(CENTER);
+
+        resultLabel = new JLabel("Result of the expression:");
+        resultLabel.setHorizontalAlignment(CENTER);
 
         calculateButton = new JButton("calculate");
         calculateButton.addActionListener(new ActionListener() {

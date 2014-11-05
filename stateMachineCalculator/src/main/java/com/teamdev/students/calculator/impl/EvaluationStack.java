@@ -66,7 +66,9 @@ public class EvaluationStack {
     public void pushOperator(BinaryOperator operator) {
 
         while (isOperatorOnTheTop() && ((operatorStack.peek().compareTo(operator) > 0) ||
-                (operatorStack.peek().compareTo(operator) > -1 && ((AbstractBinaryOperator) operator).isLeftAssociative()))) {
+                (operatorStack.peek().compareTo(operator) > -1 &&
+                        ((AbstractBinaryOperator) operator).isLeftAssociative()))) {
+
             executeBinaryOperator();
         }
 
