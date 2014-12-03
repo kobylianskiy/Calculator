@@ -9,7 +9,6 @@ public class ConsoleApplication {
     public void execute() throws Exception {
         Scanner scanner = new Scanner(System.in);
         MathExpressionCalculator calculator = new StateMachineCalculator();
-
         String expression = "";
         while (true) {
             System.out.println("Enter expression or '-1' for break:");

@@ -27,7 +27,7 @@ public class StateMachineCalculator extends FiniteStateMachine<State, Evaluation
 
     public static void main(String[] args) throws Exception {
         final StateMachineCalculator calculator = new StateMachineCalculator();
-        final BigDecimal result = calculator.evaluate("2+sqrt(256)");
+        final BigDecimal result = calculator.evaluate("min(1;2)");
         System.out.println("result = " + result);
     }
 }

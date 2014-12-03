@@ -42,12 +42,12 @@ public class FunctionRightParenthesisParser implements MathExpressionParser {
 
                     final AbstractFunction function =
                             (AbstractFunction) stack.getFunctionStack().peek();
-                    final int argumentCount = stack.getFunctionArgumentCount().peek();
+                    final int argumentCount = stack.getFunctionArgumentCountStack().peek();
 
                     if (argumentCount >  function.getMaxArgumentCount() ||
                             argumentCount < function.getMinArgumentCount()) {
 
-                        throw new EvaluationException("Wrong function argument count at index:",
+                        throw new EvaluationException("Wrong function argument count",
                                 expressionReader.getIndex());
                     }
 

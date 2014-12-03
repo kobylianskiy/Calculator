@@ -35,7 +35,7 @@ public class RightParenthesisParser implements MathExpressionParser {
                 public void evaluate(EvaluationStack stack) throws EvaluationException {
 
                     if (stack.getParenthesisStack().isEmpty()) {
-                        throw new EvaluationException("Opening bracket expected at index:",
+                        throw new EvaluationException("Opening bracket expected",
                                 expressionReader.getIndex());
                     }
 

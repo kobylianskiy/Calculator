@@ -12,10 +12,9 @@ public class EvaluationStack {
     private final Deque<Integer> parenthesisStack = new ArrayDeque<>();
 
     private final Deque<Function> functionStack = new ArrayDeque<>();
-    private final Deque<Integer> functionArgumentCount = new ArrayDeque<>();
+    private final Deque<Integer> functionArgumentCountStack = new ArrayDeque<>();
     private final Deque<Integer> functionParenthesisStack = new ArrayDeque<>();
-
-    private final Deque<Integer> functionArgumentEvaluation = new ArrayDeque<>();
+    private final Deque<Integer> functionOperatorStack = new ArrayDeque<>();
 
     public Deque<Integer> getParenthesisStack() {
         return parenthesisStack;
@@ -33,8 +32,8 @@ public class EvaluationStack {
         return functionStack;
     }
 
-    public Deque<Integer> getFunctionArgumentCount() {
-        return functionArgumentCount;
+    public Deque<Integer> getFunctionArgumentCountStack() {
+        return functionArgumentCountStack;
     }
 
     public Deque<Integer> getFunctionParenthesisStack() {
@@ -52,7 +51,7 @@ public class EvaluationStack {
 
     public void executeFunction() {
         Function function = functionStack.pop();
-        int numberOfArguments = functionArgumentCount.pop();
+        int numberOfArguments = functionArgumentCountStack.pop();
         BigDecimal[] arguments = new BigDecimal[numberOfArguments];
 
         for (int i = 0; i < arguments.length; i++) {
@@ -93,16 +92,16 @@ public class EvaluationStack {
     }
 
     public void pushFunctionLeftParenthesis() {
-        functionArgumentCount.push(1);
+        functionArgumentCountStack.push(1);
         functionParenthesisStack.push(parenthesisStack.size());
-        functionArgumentEvaluation.push(operatorStack.size());
+        functionOperatorStack.push(operatorStack.size());
     }
 
     public void pushFunctionRightParenthesis() {
         functionParenthesisStack.pop();
 
         evaluateFunctionArgument();
-        functionArgumentEvaluation.pop();
+        functionOperatorStack.pop();
 
         executeFunction();
     }
@@ -116,14 +115,14 @@ public class EvaluationStack {
     }
 
     public void pushArgumentSeparator() {
-        final int argumentCount = functionArgumentCount.pop();
-        functionArgumentCount.push(argumentCount + 1);
+        final int argumentCount = functionArgumentCountStack.pop();
+        functionArgumentCountStack.push(argumentCount + 1);
 
         evaluateFunctionArgument();
     }
 
     public void evaluateFunctionArgument() {
-        while (functionArgumentEvaluation.peek() < operatorStack.size()) {
+        while (functionOperatorStack.peek() < operatorStack.size()) {
             executeBinaryOperator();
         }
     }
@@ -131,11 +130,9 @@ public class EvaluationStack {
     public boolean isOperatorOnTheTop() {
         if (operatorStack.isEmpty()) {
             return false;
-        }
-        if (parenthesisStack.isEmpty()) {
+        } else if (parenthesisStack.isEmpty()) {
             return true;
-        }
-        if (parenthesisStack.peek() < operatorStack.size()) {
+        } else if (parenthesisStack.peek() < operatorStack.size()) {
             return true;
         }
 

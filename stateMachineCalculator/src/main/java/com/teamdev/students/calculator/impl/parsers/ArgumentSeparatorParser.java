@@ -17,7 +17,7 @@ public class ArgumentSeparatorParser implements MathExpressionParser {
         LOGGER.info("Inside ArgumentSeparatorParser.");
         if (!expressionReader.endOfExpression() &&
                 expressionReader.getCurrentChar() == ARGUMENT_SEPARATOR.getSymbol()) {
-            LOGGER.info("ArgumentSeparatorParser is accepted");
+            LOGGER.info("ArgumentSeparatorParser is accepted.");
             expressionReader.incrementIndex(1);
 
             return new EvaluationCommand() {

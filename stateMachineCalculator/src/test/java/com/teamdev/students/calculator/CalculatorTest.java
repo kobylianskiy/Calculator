@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestCalculator {
+public class CalculatorTest {
     private static MathExpressionCalculator calculator;
 
     @BeforeClass

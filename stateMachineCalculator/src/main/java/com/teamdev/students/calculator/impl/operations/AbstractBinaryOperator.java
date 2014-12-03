@@ -17,14 +17,14 @@ public abstract class AbstractBinaryOperator implements BinaryOperator {
         RIGHT
     }
 
-    @Override
-    public int compareTo(BinaryOperator o) {
-        return priority.compareTo( ((AbstractBinaryOperator) o).priority );
-    }
-
     public AbstractBinaryOperator(Priority priority, Associativity associativity) {
         this.priority = priority;
         this.associativity = associativity;
+    }
+
+    @Override
+    public int compareTo(BinaryOperator o) {
+        return priority.compareTo( ((AbstractBinaryOperator) o).priority );
     }
 
     public boolean isLeftAssociative() {
